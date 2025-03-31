@@ -11,17 +11,23 @@ import InteractiveBackground from "@/components/InteractiveBackground";
 import CustomCursor from "@/components/CustomCursor";
 import PageTransition from "@/components/PageTransition";
 import SoundToggle from "@/components/SoundToggle";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { LazyMotion, domAnimation } from "framer-motion";
+
+// Performance optimization - lazy load components that aren't immediately visible
+const LazyAbout = lazy(() => import("@/components/About"));
+const LazySkills = lazy(() => import("@/components/Skills"));
+const LazyProjects = lazy(() => import("@/components/Projects"));
+const LazyContact = lazy(() => import("@/components/Contact"));
 
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
   
   useEffect(() => {
-    // Simulate loading for smoother entry animation
+    // Shorter loading for better UX
     const timer = setTimeout(() => {
       setLoaded(true);
-    }, 1000);
+    }, 800);
     
     return () => clearTimeout(timer);
   }, []);
@@ -40,10 +46,18 @@ const Index = () => {
               <SoundToggle />
               <main className="flex-grow overflow-hidden">
                 <Hero />
-                <About />
-                <Skills />
-                <Projects />
-                <Contact />
+                <Suspense fallback={<div className="section-container flex items-center justify-center">Loading...</div>}>
+                  <LazyAbout />
+                </Suspense>
+                <Suspense fallback={<div className="section-container flex items-center justify-center">Loading...</div>}>
+                  <LazySkills />
+                </Suspense>
+                <Suspense fallback={<div className="section-container flex items-center justify-center">Loading...</div>}>
+                  <LazyProjects />
+                </Suspense>
+                <Suspense fallback={<div className="section-container flex items-center justify-center">Loading...</div>}>
+                  <LazyContact />
+                </Suspense>
               </main>
               <Footer />
             </>

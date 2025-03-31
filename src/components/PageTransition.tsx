@@ -17,7 +17,7 @@ const PageTransition = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => {
-        const newProgress = prev + (100 - prev) * 0.1;
+        const newProgress = prev + (100 - prev) * 0.2; // Faster loading
         
         // Update text based on progress
         if (newProgress > 20 && textIndex === 0) setTextIndex(1);
@@ -27,7 +27,7 @@ const PageTransition = () => {
         
         return newProgress >= 99.5 ? 100 : newProgress;
       });
-    }, 100);
+    }, 80); // Faster interval
     
     return () => clearInterval(interval);
   }, [textIndex]);
@@ -39,7 +39,7 @@ const PageTransition = () => {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
             className="text-4xl font-bold text-center mb-2"
           >
             <span className="animated-gradient-text">Vikram Bawa</span>
@@ -47,7 +47,7 @@ const PageTransition = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
+            transition={{ delay: 0.2, duration: 0.3 }}
             className="text-lg text-center text-muted-foreground"
           >
             Frontend Developer
@@ -79,9 +79,9 @@ const PageTransition = () => {
                 opacity: [0.3, 1, 0.3]
               }}
               transition={{ 
-                duration: 1.5, 
+                duration: 1.2, 
                 repeat: Infinity, 
-                delay: dot * 0.3 
+                delay: dot * 0.2 
               }}
               className="w-2 h-2 rounded-full bg-primary"
             />

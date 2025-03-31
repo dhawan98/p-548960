@@ -11,15 +11,19 @@ const SoundToggle = () => {
   const { toast } = useToast();
   
   useEffect(() => {
-    // Create audio element for ambient sound
-    const audio = new Audio("/ambient-synth.mp3");
-    audio.loop = true;
-    audio.volume = 0.2;
-    audioRef.current = audio;
+    // Add audio element to DOM to avoid autoplay issues
+    const audioElement = document.createElement('audio');
+    audioElement.src = "/ambient-synth.mp3";
+    audioElement.loop = true;
+    audioElement.volume = 0.2;
+    audioElement.setAttribute('preload', 'auto');
+    document.body.appendChild(audioElement);
+    audioRef.current = audioElement;
     
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
+        document.body.removeChild(audioRef.current);
         audioRef.current = null;
       }
     };
@@ -30,25 +34,29 @@ const SoundToggle = () => {
     
     if (isMuted) {
       // User is unmuting - start playing
-      audioRef.current.play()
-        .then(() => {
-          setIsMuted(false);
-          toast({
-            title: "Ambient sound enabled",
-            description: "Enjoy the immersive experience!",
-            duration: 3000,
+      const playPromise = audioRef.current.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsMuted(false);
+            toast({
+              title: "Ambient sound enabled",
+              description: "Enjoy the immersive experience!",
+              duration: 3000,
+            });
+          })
+          .catch(error => {
+            // Handle autoplay restrictions
+            console.error("Autoplay prevented:", error);
+            toast({
+              title: "Couldn't enable sound",
+              description: "Browser blocked autoplay. Try clicking again after interacting with the page.",
+              variant: "destructive",
+              duration: 5000,
+            });
           });
-        })
-        .catch(error => {
-          // Handle autoplay restrictions
-          console.error("Autoplay prevented:", error);
-          toast({
-            title: "Couldn't enable sound",
-            description: "Browser blocked autoplay. Try again after interacting with the page.",
-            variant: "destructive",
-            duration: 5000,
-          });
-        });
+      }
     } else {
       // User is muting - pause audio
       audioRef.current.pause();
