@@ -1,5 +1,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -116,6 +118,56 @@
   .nav-link-active {
     @apply text-foreground after:w-full;
   }
+  
+  .tech-font {
+    @apply font-mono tracking-wider;
+  }
+  
+  .futuristic-border {
+    @apply relative before:absolute before:inset-0 before:p-[1px] before:bg-gradient-to-r 
+           before:from-primary/40 before:via-purple-500/40 before:to-primary/40 
+           before:rounded-lg before:-z-10 before:opacity-0 hover:before:opacity-100
+           before:transition-opacity before:duration-500;
+  }
+  
+  .glass-panel {
+    @apply bg-white/10 dark:bg-white/5 backdrop-blur-md 
+           border border-white/20 dark:border-white/10 rounded-xl 
+           shadow-xl;
+  }
+  
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .aurora-bg {
+    @apply relative overflow-hidden;
+  }
+  
+  .aurora-bg::before {
+    content: '';
+    @apply absolute top-0 left-0 right-0 bottom-0 opacity-20 dark:opacity-30 
+           bg-gradient-to-br from-blue-300 via-purple-300 to-pink-300 
+           dark:from-blue-900 dark:via-purple-900 dark:to-pink-900
+           blur-[100px] z-[-1] animate-aurora transition-opacity duration-1000;
+  }
+}
+
+@keyframes aurora {
+  0% {
+    transform: rotate(0deg) scale(1.5);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.5);
+  }
 }
 
 @keyframes gradient-x {
@@ -172,6 +224,39 @@
   animation: pulse-glow 2s infinite;
 }
 
+.animate-aurora {
+  animation: aurora 15s infinite alternate ease-in-out;
+}
+
+.animate-gradient-x {
+  animation: gradient-x 15s linear infinite;
+}
+
+/* Text gradient animation */
+.animated-gradient-text {
+  background: linear-gradient(to right, 
+    hsl(var(--primary)), 
+    hsl(280, 70%, 60%), 
+    hsl(340, 70%, 60%), 
+    hsl(var(--primary)));
+  background-size: 300% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: gradient-x 6s linear infinite;
+}
+
+/* 3D hover effect for cards */
+.card-3d {
+  transition: transform 0.5s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.card-3d:hover {
+  transform: rotateY(10deg) rotateX(5deg);
+}
+
 /* Improved scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -188,4 +273,9 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: hsl(var(--primary) / 0.5);
+}
+
+/* Theme toggle animation */
+.theme-transition {
+  @apply transition-colors duration-500;
 }
